@@ -1,0 +1,199 @@
+---
+title: "Report on Fat Data"
+author: "Group 2"
+date: "2025-01-17"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+#Fat Data
+
+1. Introduction to R and Data Exploration
+
+This report presents an analysis of body fat percentage and body measurements using R, a programming language designed for statistical analysis and visualizations. The dataset includes a variety of variables, which will be examined to provide a clearer understanding of the data.
+
+
+###Data loading
+```{r}
+library(faraway)
+```
+```{r}
+data(fat)
+```
+The library() function is used to load the faraway package into the R session.
+Then the data() function is used to load the fat dataset from the faraway package into the session.
+
+
+
+###Data types
+```{r}
+str(fat)
+```
+Our dataset contains 252 observations (rows) of 18 variables (columns). Most variables are numeric except the age which is an integer.
+
+
+
+###Frequency table of variables age (integer) and density (numeric)
+```{r}
+age_tab <- table(fat$age)
+age_tab
+```
+
+The age_tab creates an ascending array of the variable age with the number of times (frequency) each age appears in the dataset.
+
+```{r}
+density_tab <- table(fat$density)
+density_tab
+```
+
+The density_tab creates an array of the density of people in our dataset.We notice that most of the values are unique values and the highest frequency is 4. 
+
+
+
+###Visualizations
+
+##Barplot of integer variable age
+```{r}
+barplot(age_tab, col = "grey")
+```
+
+The barplot shows that the age with the highest frequency is 40 years old which appears 17 times in our dataset.
+
+##Histogram of numeric variable density
+```{r}
+hist(fat$density, main = "Histogram of body density",
+     xlab = "density")
+abline(v = mean(fat$density), col = "red")  
+abline(v = median(fat$density), col = "blue")
+```
+
+The histogram of body density shows that the highest frequency is between the densities 1.05 and 1.06 .The red line and the blue line show respectively the mean and the median of the body density.
+
+
+###Custom function
+```{r}
+custom_median <- function(x){
+  if (length(x) %% 2 == 0){
+    result = (sort(x)[length(x)/2] + sort(x)[(length(x)/2)+1])/2
+  }else{
+    result = sort(x)[(length(x)+1)/2]
+  }
+  return(result)
+}
+custom_median(fat$weight)
+
+custom_mean <- function(x) {
+  sum_x <- sum(x)
+  n <- length(x)
+  result = sum_x / n
+  return(result)
+}
+custom_mean(fat$weight)
+
+```
+
+The median of the weight of people in the fat dataset is 176.5 and the mean is 178.9244
+
+
+
+###Relevance of statistical reasoning and how it can be applied in analyzing our dataset
+
+Statistical reasoning helps in summarizing and interpreting data in order to gain valuable insights.
+
+In analyzing our datasets on body fat measurements statistical reasoning helps in understanding the relationship between variables like weight and height which can be useful in predictions. It helps us summarize the dataset by computing the median and the mean of the weight of people.
+
+
+
+
+
+2. Data Presentation and Sampling 
+
+Our dataset includes measurements of people's height,weight,...and age of people. We presume that they have been collected through a survey.
+
+
+###Sampling
+```{r}
+sampled_fat <- fat[sample(nrow(fat), size = 30), ]
+print(sampled_fat)
+
+```
+A simple random sampling is done by first determining the number of rows in the fat data. Then, 30 rows are randomly selected using the sample() function, and the sample is displayed.
+
+
+
+###Custom function
+```{r}
+custom_median <- function(x){
+  if (length(x) %% 2 == 0){
+    result = (sort(x)[length(x)/2] + sort(x)[(length(x)/2)+1])/2
+  }else{
+    result = sort(x)[(length(x)+1)/2]
+  }
+  return(result)
+}
+custom_median(sampled_fat$weight)
+
+custom_mean <- function(x) {
+  sum_x <- sum(x)
+  n <- length(x)
+  result = sum_x / n
+  return(result)
+}
+custom_mean(sampled_fat$weight)
+
+```
+The median of the sampled_fat and the mean are approximative to the population's weight median and mean.
+
+
+###Visualizations
+## pie chart for numeric variable height
+```{r}
+height_tab <- table (sampled_fat$height)
+height_tab
+pie(height_tab)
+```
+
+##histogram for integer variable age
+```{r}
+age_tab <- table (sampled_fat$age)
+age_tab
+hist(sampled_fat$age, main = "Histogram of age of sampled_fat",
+     xlab = "Age")
+abline(v = mean(sampled_fat$age), col = "red")  
+abline(v = median(sampled_fat$age), col = "blue")
+```
+We notice that the age with highest frequency which was 40 years old is now around 45 years old.
+
+
+
+###Boxplot for numeric variable weight
+```{r}
+weight_tab <- table (sampled_fat$weight)
+weight_tab
+boxplot(sampled_fat$weight)
+```
+###Scatter plot to analyze relationship
+```{r}
+plot(x = sampled_fat$height, y = sampled_fat$weight, col = "green", pch = 16, 
+     xlab = "Height", ylab = "Weight", 
+     main = "Relationship between Height and Weight")
+```
+
+This scatter plot shows a positive relationship between height and weight. As weight increases, height also tends to increase. This observation shows that taller individuals generally have a higher weight.
+
+
+
+
+
+
+
+
+
+
